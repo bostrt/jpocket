@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import net.bostrt.jpocket.exception.JPocketException;
 import net.bostrt.jpocket.properties.SendProperties;
 
 public class JPocket {
@@ -19,22 +20,41 @@ public class JPocket {
 	}
 
 	private static void send(SendProperties props, Auth auth) {
-		makeRequest("send", props, auth);
+		send("send", props, auth);
 	}
 	
-	private static void makeRequest(String action, SendProperties props,
+	private static void send(String action, SendProperties props,
 			Auth auth) {
-		String completeUrl = baseUrl + action + "?" + "username=" + username
+		String completeUrl = baseUrl + action + "?"
+				+ "username=" + username
 				+ "&password=" + password + "&apikey=" + apiKey + "&"
 				+ props.encodeNewUrls() + "&"
 				+ props.encodeRead() + "&"
 				+ props.encodeUpdateTags() + "&" 
 				+ props.encodeUpdateTitle();
 
+		makeRequest(completeUrl);
+	}
+
+	public static void signup(String newUsername, String newPassword) {
+		String completeUrl = baseUrl + "signup?" 
+				+ "username=" + newUsername
+				+ "&password=" + newPassword 
+				+ "&apikey=" + apiKey;
+		
+		makeRequest(completeUrl);
+	}
+	
+	private static void makeRequest(String completeUrl) {
 		try {
 			URL url = new URL(completeUrl);
 			URLConnection conn = url.openConnection();
 
+			String xError = conn.getHeaderField("X-Error");
+			if(xError != null) {
+				throw new JPocketException(xError);
+			}
+			
 			BufferedReader input = new BufferedReader(
 									new InputStreamReader(
 											conn.getInputStream()));
@@ -50,6 +70,12 @@ public class JPocket {
 	}
 }
 
+/**
+ * This isn't really used right now...it's okay though
+ * 
+ * @author robert
+ *
+ */
 class Auth {
 	public String username;
 	public String password;

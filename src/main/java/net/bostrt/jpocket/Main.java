@@ -1,14 +1,9 @@
 package net.bostrt.jpocket;
 
-import net.bostrt.jpocket.properties.SendProperties;
 
 public class Main {
 
 	public static void main(String[] args) {
-		SendProperties props = new SendProperties();
-		//props.addURL("http://en.wikipedia.org/wiki/Command_pattern");
-		props.updateTitle("http://en.wikipedia.org/wiki/Command_pattern", "CMD");
-		
-		JPocket.send(props);
+		JPocket.signup("test", "foobar123");
 	}
 }
