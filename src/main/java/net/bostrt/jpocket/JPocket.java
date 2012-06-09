@@ -26,7 +26,9 @@ public class JPocket {
 			Auth auth) {
 		String completeUrl = baseUrl + action + "?" + "username=" + username
 				+ "&password=" + password + "&apikey=" + apiKey + "&"
-				+ props.encodeNewUrls();
+				+ props.encodeNewUrls() + "&"
+				+ props.encodeRead() + "&"
+				+ props.encodeEditTags();
 
 		try {
 			URL url = new URL(completeUrl);
