@@ -11,11 +11,13 @@ public class SendProperties
 	private List<HashMap<String, String>> newUrls;
 	private List<HashMap<String, String>> read;
 	private List<HashMap<String, String>> updateTags;
+	private List<HashMap<String, String>> updateTitles; 
 
 	public SendProperties() {
 		newUrls = new ArrayList<HashMap<String,String>>(); 
 		read = new ArrayList<HashMap<String, String>>();
 		updateTags = new ArrayList<HashMap<String, String>>();
+		updateTitles = new ArrayList<HashMap<String, String>>();
 	}
 	
 	public SendProperties addURL(String url) {
@@ -40,8 +42,13 @@ public class SendProperties
 		return this;
 	}
 	
-	public SendProperties editTitle(String url, String title) {
-		return null;
+	public SendProperties updateTitle(String url, String title) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("url", url);
+		map.put("title", title);
+		updateTitles.add(map);
+		
+		return this;
 	}
 	
 	public SendProperties markRead(String url) {
@@ -67,10 +74,18 @@ public class SendProperties
 		return "read=" + JSONValue.toJSONString(read);
 	}
 	
-	public String encodeEditTags() {
+	public String encodeUpdateTags() {
 		if(updateTags.isEmpty()){
 			return "";
 		}
 		return "update_tags=" + JSONValue.toJSONString(updateTags);
+	}
+	
+	public String encodeUpdateTitle() {
+		if(updateTitles.isEmpty()){
+			return "";
+		}
+		
+		return "update_title=" + JSONValue.toJSONString(updateTitles);
 	}
 }

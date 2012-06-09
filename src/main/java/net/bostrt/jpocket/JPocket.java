@@ -28,7 +28,8 @@ public class JPocket {
 				+ "&password=" + password + "&apikey=" + apiKey + "&"
 				+ props.encodeNewUrls() + "&"
 				+ props.encodeRead() + "&"
-				+ props.encodeEditTags();
+				+ props.encodeUpdateTags() + "&" 
+				+ props.encodeUpdateTitle();
 
 		try {
 			URL url = new URL(completeUrl);
