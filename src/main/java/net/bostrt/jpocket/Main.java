@@ -1,9 +1,14 @@
 package net.bostrt.jpocket;
 
+import net.bostrt.jpocket.properties.SendProperties;
+
 
 public class Main {
 
 	public static void main(String[] args) {
-		JPocket.signup("test", "foobar123");
+		SendProperties props = new SendProperties();
+		props.addURL("http://www.google.com");
+		
+		JPocket.send(props);
 	}
 }

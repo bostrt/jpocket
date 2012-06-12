@@ -1,12 +1,10 @@
 package net.bostrt.jpocket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
-import net.bostrt.jpocket.exception.JPocketException;
 import net.bostrt.jpocket.properties.SendProperties;
+import net.bostrt.jpocket.repsonse.Response;
 
 public class JPocket {
 	private static final String username = "";
@@ -14,59 +12,63 @@ public class JPocket {
 	private static final String apiKey = "";
 	private static final String baseUrl = "https://readitlaterlist.com/v2/";
 
-	public static void send(SendProperties props) {
+	public static Response send(SendProperties props) {
 		Auth auth = new Auth(username, password, apiKey);
-		send(props, auth);
+		return send(props, auth);
 	}
 
-	private static void send(SendProperties props, Auth auth) {
-		send("send", props, auth);
+	private static Response send(SendProperties props, Auth auth) {
+		return send("send", props, auth);
 	}
 	
-	private static void send(String action, SendProperties props,
+	private static Response send(String action, SendProperties props,
 			Auth auth) {
 		String completeUrl = baseUrl + action + "?"
 				+ "username=" + username
-				+ "&password=" + password + "&apikey=" + apiKey + "&"
-				+ props.encodeNewUrls() + "&"
-				+ props.encodeRead() + "&"
-				+ props.encodeUpdateTags() + "&" 
+				+ "&password=" + password + "&apikey=" + apiKey
+				+ props.encodeNewUrls()
+				+ props.encodeRead()
+				+ props.encodeUpdateTags() 
 				+ props.encodeUpdateTitle();
 
-		makeRequest(completeUrl);
+		return makeRequest(completeUrl);
 	}
 
-	public static void signup(String newUsername, String newPassword) {
+	public static Response signup(String newUsername, String newPassword) {
 		String completeUrl = baseUrl + "signup?" 
 				+ "username=" + newUsername
 				+ "&password=" + newPassword 
 				+ "&apikey=" + apiKey;
 		
-		makeRequest(completeUrl);
+		return makeRequest(completeUrl);
 	}
 	
-	private static void makeRequest(String completeUrl) {
+	public static Response authenticate(String checkUsername, String checkPassword) {
+		String completeUrl = baseUrl + "auth?" 
+				+ "username=" + checkUsername 
+				+ "&password=" + checkPassword
+				+ "&apikey=" + apiKey;
+		
+		return makeRequest(completeUrl);
+	}
+	
+	private static Response makeRequest(String completeUrl) {
 		try {
 			URL url = new URL(completeUrl);
-			URLConnection conn = url.openConnection();
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-			String xError = conn.getHeaderField("X-Error");
-			if(xError != null) {
-				throw new JPocketException(xError);
-			}
+			int code = conn.getResponseCode();
+			String msg = (code == 200 ? "Success" : conn.getHeaderField("X-Error")); 
 			
-			BufferedReader input = new BufferedReader(
-									new InputStreamReader(
-											conn.getInputStream()));
+			Response r = new Response(code, msg);
 
-			String response = "";
-
-			while ((response = input.readLine()) != null) {
-				System.out.println(response);
-			}
+			conn.disconnect();
+			return r;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 }
 

@@ -1,5 +1,7 @@
 package net.bostrt.jpocket.properties;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,21 +66,21 @@ public class SendProperties
 			return "";
 		}
 		
-		return "new=" + JSONValue.toJSONString(newUrls);
+		return "&new=" + JSONValue.toJSONString(newUrls);
 	}
 	
 	public String encodeRead() {
 		if(read.isEmpty()){
 			return "";
 		}
-		return "read=" + JSONValue.toJSONString(read);
+		return "&read=" + JSONValue.toJSONString(read);
 	}
 	
 	public String encodeUpdateTags() {
 		if(updateTags.isEmpty()){
 			return "";
 		}
-		return "update_tags=" + JSONValue.toJSONString(updateTags);
+		return "&update_tags=" + JSONValue.toJSONString(updateTags);
 	}
 	
 	public String encodeUpdateTitle() {
@@ -86,6 +88,6 @@ public class SendProperties
 			return "";
 		}
 		
-		return "update_title=" + JSONValue.toJSONString(updateTitles);
+		return "&update_title=" + JSONValue.toJSONString(updateTitles);
 	}
 }
