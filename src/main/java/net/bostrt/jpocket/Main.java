@@ -11,10 +11,6 @@ public class Main {
 		SendProperties props = new SendProperties();
 		props.addURL("http://www.google.com");
 		
-		//Response r = JPocket.send(props);
-		Map<String, String> headers = JPocket.api(true).getHeaders();
-		for(String key : headers.keySet()) {
-			System.out.println(key + " => " + headers.get(key));
-		}	
+		System.out.println(JPocket.authenticate("", ""));
 	}
 }

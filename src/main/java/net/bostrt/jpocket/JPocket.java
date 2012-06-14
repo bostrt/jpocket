@@ -45,13 +45,13 @@ public class JPocket {
 		return makeRequest(completeUrl);
 	}
 	
-	public static Response authenticate(String checkUsername, String checkPassword) {
+	public static boolean authenticate(String checkUsername, String checkPassword) {
 		String completeUrl = baseUrl + "auth?" 
 				+ "username=" + checkUsername 
 				+ "&password=" + checkPassword
 				+ "&apikey=" + apiKey;
 		
-		return makeRequest(completeUrl);
+		return makeRequest(completeUrl).getResponseCode() == 200;
 	}
 	
 	public static Response api(boolean userLimits) {
