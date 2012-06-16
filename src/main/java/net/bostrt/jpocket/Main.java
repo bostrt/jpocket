@@ -1,16 +1,16 @@
 package net.bostrt.jpocket;
 
-import java.util.Map;
+import net.bostrt.jpocket.respsonse.Response;
 
-import net.bostrt.jpocket.properties.SendProperties;
+import org.json.simple.JSONObject;
 
 
 public class Main {
 
 	public static void main(String[] args) {
-		SendProperties props = new SendProperties();
-		props.addURL("http://www.google.com");
-		
-		System.out.println(JPocket.authenticate("", ""));
+		Response r = JPocket.stats();
+		JSONObject o = r.getJSONContent();
+		System.out.println(r.getMessage());
+		System.out.println(o.get("user_since"));
 	}
 }

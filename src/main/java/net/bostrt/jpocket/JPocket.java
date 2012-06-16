@@ -1,5 +1,7 @@
 package net.bostrt.jpocket;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -74,6 +76,15 @@ public class JPocket {
 		return makeRequest(completeUrl, extraHeaders);
 	}
 	
+	public static Response stats() {
+		String completeUrl = baseUrl + "stats?"
+				+ "username=" + username + "&"
+				+ "password=" + password + "&"
+				+ "apikey=" + apiKey;
+		
+		return makeRequest(completeUrl);
+	}
+	
 	private static Response makeRequest(String completeUrl) {
 		return makeRequest(completeUrl, null);
 	}
@@ -84,9 +95,18 @@ public class JPocket {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 			int code = conn.getResponseCode();
-			String msg = (code == 200 ? "Success" : conn.getHeaderField("X-Error")); 
 			
-			Response r = new Response(code, msg);
+			String msg = (code == 200 ? "Success" : conn.getHeaderField("X-Error")); 
+
+			String content = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			while((inputLine = reader.readLine()) != null) {
+				content += inputLine;
+			}
+			reader.close();
+			
+			Response r = new Response(code, msg, content);
 			
 			if(extraHeaders != null) {
 				for(String header : extraHeaders) {
