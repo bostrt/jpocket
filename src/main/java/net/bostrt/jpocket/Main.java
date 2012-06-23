@@ -1,6 +1,7 @@
 package net.bostrt.jpocket;
 
 import net.bostrt.jpocket.respsonse.Response;
+import net.bostrt.jpocket.respsonse.Response.Key;
 
 import org.json.simple.JSONObject;
 
@@ -11,6 +12,6 @@ public class Main {
 		Response r = JPocket.stats();
 		JSONObject o = r.getJSONContent();
 		System.out.println(r.getMessage());
-		System.out.println(o.get("user_since"));
+		System.out.println(r.getValue(Key.COUNT_LIST));
 	}
 }

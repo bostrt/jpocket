@@ -10,12 +10,13 @@ import java.util.List;
 import net.bostrt.jpocket.properties.SendProperties;
 import net.bostrt.jpocket.respsonse.Response;
 
-public class JPocket {
+public class JPocket 
+{
 	private static final String username = "";
 	private static final String password = "";
 	private static final String apiKey = "";
 	private static final String baseUrl = "https://readitlaterlist.com/v2/";
-
+	
 	public static Response send(SendProperties props) {
 		Auth auth = new Auth(username, password, apiKey);
 		return send(props, auth);
@@ -66,12 +67,12 @@ public class JPocket {
 		}
 		
 		List<String> extraHeaders = new ArrayList<String>();
-		extraHeaders.add("X-Limit-User-Limit");
-		extraHeaders.add("X-Limit-User-Remaining");
-		extraHeaders.add("X-Limit-User-Reset");
-		extraHeaders.add("X-Limit-Key-Limit");
-		extraHeaders.add("X-Limit-Key-Remaining");
-		extraHeaders.add("X-Limit-Key-Reset");
+		extraHeaders.add(Response.Header.USER_LIMIT.toString());
+		extraHeaders.add(Response.Header.USER_REMAINING.toString());
+		extraHeaders.add(Response.Header.USER_RESET_DELAY.toString());
+		extraHeaders.add(Response.Header.KEY_LIMIT.toString());
+		extraHeaders.add(Response.Header.KEY_REMAINING.toString());
+		extraHeaders.add(Response.Header.KEY_RESET_DELAY.toString());
 		
 		return makeRequest(completeUrl, extraHeaders);
 	}

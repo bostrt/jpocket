@@ -40,6 +40,10 @@ public class Response {
 		headers.put(key, value);
 	}
 	
+	public String getHeader(Header header) {
+		return getHeader(header.toString());
+	}
+	
 	public String getHeader(String key) {
 		return headers.get(key);
 	}
@@ -48,11 +52,58 @@ public class Response {
 		return this.headers;
 	}
 	
+	public String getValue(Key key) {
+		return this.json.get(key.toString()).toString();
+	}
+	
+	private JSONObject json = null;
 	public JSONObject getJSONContent() {
-		System.out.println(this.content.getClass().getName());
-		if(this.content instanceof String) {
-			return (JSONObject)JSONValue.parse((String)this.content);
+		if(this.json == null) {
+			if(this.content instanceof String) {
+				this.json = (JSONObject)JSONValue.parse((String)this.content);
+			}
 		}
-		return null;
+		return json;
+	}
+	
+	public enum Key {
+		
+		USER_SINCE("user_since"),
+		COUNT_LIST("count_list"),
+		COUNT_UNREAD("count_unread"),
+		COUNT_READ("count_read");
+		
+		private String key;
+		
+		Key(String key) {
+			this.key = key;
+		}
+		
+		@Override
+		public String toString() {
+			return this.key;
+		}
+	}
+	
+	public enum Header {
+		
+		USER_LIMIT("X-Limit-User-Limit"),
+		USER_REMAINING("X-Limit-User-Remaining"),
+		USER_RESET_DELAY("X-Limit-User-Reset"),
+		
+		KEY_LIMIT("X-Limit-Key-Limit"),
+		KEY_REMAINING("X-Limit-Key-Remaining"),
+		KEY_RESET_DELAY("X-Limit-Key-Reset");
+		
+		private String header;
+		
+		Header(String header) {
+			this.header = header;
+		}
+		
+		@Override
+		public String toString() {
+			return this.header;
+		}
 	}
 }
